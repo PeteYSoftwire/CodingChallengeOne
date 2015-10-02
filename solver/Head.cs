@@ -20,15 +20,19 @@ namespace CodingChallengeOne.Solver
 
         public List<Solution> solve()
         {
-            Solution partialSolution = readOne();
-            partialSolutions.Add(partialSolution);
+            bool isFinished = false;
+            while(!isFinished){
+                isFinished = readOne();
+            }
             return partialSolutions;
         }
 
-        private Solution readOne()
+        private bool readOne()
         {
             int value = sequence[index];
-            return generatePartialSolution(sequence, value);
+            partialSolutions.Add(generatePartialSolution(sequence, value));
+            return value == 0;
+
         }
 
         private Solution generatePartialSolution(List<int> sequence, int value)
@@ -72,13 +76,24 @@ namespace CodingChallengeOne.Solver
         private int adjustPrevious(int amount)
         {
             int targetIndex = index + (-1)*direction;
-            sequence[targetIndex] = sequence[targetIndex] + amount;
+            int newVal = sequence[targetIndex] + amount % 5;
+            if (newVal < 0)
+            {
+                newVal = 4;
+            }
+            sequence[targetIndex] = newVal;
+            
             return targetIndex;
         }
 
         private Solution producePartial(int indexChanged)
         {
-            return new Solution(sequence, indexChanged);
+            List<int> newSequence = new List<int>();
+            sequence.ForEach((x)=>
+                {
+                    newSequence.Add(x);
+                });
+            return new Solution(newSequence, indexChanged);
         }
 
 
