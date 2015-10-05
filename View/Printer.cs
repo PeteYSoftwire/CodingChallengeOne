@@ -18,10 +18,13 @@ namespace CodingChallengeOne.View
 
         public void print()
         {
+            int i = 0;
             solutions.ForEach((item)=>
                 {
+                    System.Console.Write(i++ + " - ");
                     printPartialSolution(item);
                 });
+            System.Console.WriteLine(solutions.Count);
         }
 
         private void printPartialSolution(Solution item)
@@ -31,6 +34,7 @@ namespace CodingChallengeOne.View
             String output = "";
             for (int i = 0; i < values.Count; i++)
             {
+
                 if (i == lastValueChangedIndex)
                 {
                     output = output + "*" + values[i].ToString() + "*";
