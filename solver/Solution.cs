@@ -16,5 +16,9 @@ namespace CodingChallengeOne.Solver
             this.values = values;
             this.lastValueChangedIndex = lastValueChangedIndex;
         }
+
+        public List<int> getValues() { return values; }
+
+        public int getLastValueChangedIndex() { return lastValueChangedIndex; }
     }
 }

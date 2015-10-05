@@ -16,6 +16,8 @@ namespace CodingChallengeOne.Solver
         public Head(List <int> sequence){
             this.sequence = sequence;
             this.partialSolutions = new List<Solution>();
+            //add the initial sequence to the list of partial solutions
+            this.partialSolutions.Add(producePartialSolution(-1));
         }
 
         public List<Solution> solve()
@@ -29,16 +31,16 @@ namespace CodingChallengeOne.Solver
 
         private bool readOne()
         {
-            int value = sequence[index];
-            partialSolutions.Add(generatePartialSolution(sequence, value));
-            return value == 0;
+            int instruction = sequence[index];
+            partialSolutions.Add(generatePartialSolution(sequence, instruction));
+            return instruction == 0;
 
         }
 
-        private Solution generatePartialSolution(List<int> sequence, int value)
+        private Solution generatePartialSolution(List<int> sequence, int instruction)
         {
             int indexChanged = -1;
-            switch (value)
+            switch (instruction)
             {
                 case 0:
                     break;
@@ -46,11 +48,11 @@ namespace CodingChallengeOne.Solver
                     updateIndex();
                     break;
                 case 2:
-                    indexChanged = adjustPrevious(1);
+                    indexChanged = adjustPreviousInstruction(1);
                     updateIndex();
                     break;
                 case 3:
-                    indexChanged = adjustPrevious(-1);
+                    indexChanged = adjustPreviousInstruction(-1);
                     updateIndex();
                     break;
                 case 4:
@@ -61,7 +63,7 @@ namespace CodingChallengeOne.Solver
                     System.Console.WriteLine("invalid instruction!");
                     break;
             }
-            return producePartial(indexChanged);
+            return producePartialSolution(indexChanged);
         }
 
         private void updateIndex()
@@ -73,10 +75,14 @@ namespace CodingChallengeOne.Solver
             }
         }
 
-        private int adjustPrevious(int amount)
+        private int adjustPreviousInstruction(int amount)
         {
-            int targetIndex = index + (-1)*direction;
-            int newVal = sequence[targetIndex] + amount % 5;
+            int targetIndex = (index + (-1)*direction) % sequence.Count;
+            if (targetIndex < 0)
+            {
+                targetIndex = sequence.Count - 1;
+            }
+            int newVal = (sequence[targetIndex] + amount) % 5;
             if (newVal < 0)
             {
                 newVal = 4;
@@ -86,7 +92,7 @@ namespace CodingChallengeOne.Solver
             return targetIndex;
         }
 
-        private Solution producePartial(int indexChanged)
+        private Solution producePartialSolution(int indexChanged)
         {
             List<int> newSequence = new List<int>();
             sequence.ForEach((x)=>
